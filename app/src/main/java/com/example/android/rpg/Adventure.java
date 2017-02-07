@@ -147,7 +147,7 @@ class Adventure {
         return status;
     }
     private Status addStatus(Status status){
-        status.setMessage(status.getMessage() + "\n冒险者" + status.getName() + "\nHP:" + status.getHP() + "  ATK:" + status.getATK() + "  DEF:" + status.getDEF() + "\nSPD:" + status.getSPD() + "  TEC:" + status.getTEC() + "  LUK:" + status.getLUK());
+        status.setMessage(status.getMessage() + "\n" + status.getName() + "\nHP:" + status.getHP() + "  ATK:" + status.getATK() + "  DEF:" + status.getDEF() + "\nSPD:" + status.getSPD() + "  TEC:" + status.getTEC() + "  LUK:" + status.getLUK());
         return status;
     }
     private Status addMonsterStatus(Status statusH, Status statusM){
@@ -156,26 +156,31 @@ class Adventure {
     }
     private String attack(Status attackStatus, Status defenceStatus){
         String result = "\n" + attackStatus.getName() + "攻击" + defenceStatus.getName();
-        int damage = attackStatus.getATK() - defenceStatus.getDEF();
-        if (damage <= 0){
-            damage = 1;
-        }
-        if (attackStatus.getTEC() >= defenceStatus.getTEC()){
-            Random battleRand = new Random();
-            if (attackStatus.getTEC() - defenceStatus.getTEC()> battleRand.nextInt(11)){
-                damage = (int)(damage * 2.5);
-                result = result + "\n暴击！";
+        Random battleRand = new Random();
+        if (defenceStatus.getLUK() - attackStatus.getLUK() > battleRand.nextInt(11)){
+            result = result + "\n" + defenceStatus.getName() + "躲过了攻击";
+        } else {
+            int damage = attackStatus.getATK() - defenceStatus.getDEF();
+            if (damage <= 0) {
+                damage = 1;
             }
+            if (attackStatus.getTEC() >= defenceStatus.getTEC()) {
+
+                if (attackStatus.getTEC() - defenceStatus.getTEC() > battleRand.nextInt(11)) {
+                    damage = (int) (damage * 2.5);
+                    result = result + "\n暴击！";
+                }
+            }
+            if (attackStatus.getSPD() >= defenceStatus.getSPD() * 2) {
+                damage = damage * 2;
+                result = result + "\n二次攻击！";
+            }
+            defenceStatus.setHP(defenceStatus.getHP() - damage);
+            if (defenceStatus.getHP() < 0) {
+                defenceStatus.setHP(0);
+            }
+            result = result + "\n" + "造成" + damage + "点伤害";
         }
-        if (attackStatus.getSPD() >= defenceStatus.getSPD() * 2){
-            damage = damage * 2;
-            result = result + "\n二次攻击！";
-        }
-        defenceStatus.setHP(defenceStatus.getHP() - damage);
-        if (defenceStatus.getHP() < 0){
-            defenceStatus.setHP(0);
-        }
-        result = result + "\n" + "造成" + damage + "点伤害";
         return result;
     }
 }
