@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">RPG</string>
+    <string name="name">姓名</string>
+    <string name="start">开始</string>
 </resources>

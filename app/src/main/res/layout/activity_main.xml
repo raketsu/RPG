@@ -14,19 +14,23 @@
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="姓名"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="@string/name"
             android:textSize="24sp"
             android:layout_weight="1"/>
         <EditText
+            android:inputType="text"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="2"
+            android:layout_gravity="center"
             android:id="@+id/name"/>
     </LinearLayout>
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="开始"
+        android:text="@string/start"
         android:textSize="24sp"
         android:onClick="game"/>
     <ScrollView
@@ -34,7 +38,7 @@
         android:layout_height="match_parent">
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:textSize="20sp"
             android:id="@+id/message"/>
     </ScrollView>

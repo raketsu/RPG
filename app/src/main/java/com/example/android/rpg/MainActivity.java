@@ -18,11 +18,17 @@ public class MainActivity extends AppCompatActivity {
     public void game(View view){
         EditText inputName = (EditText)findViewById(R.id.name);
         String name = inputName.getText().toString();
-        String message = "开始";
-        Adventure ad = new Adventure();
-        result = ad.go(name);
-        message = message + result;
-        displayMessage(message);
+        String message = "";
+        if ("".equals(inputName.getText().toString().trim())){
+            message = "请输入姓名";
+            displayMessage(message);
+        } else {
+            message = "开始";
+            Adventure ad = new Adventure();
+            result = ad.go(name);
+            message = message + result;
+            displayMessage(message);
+        }
     }
     private void displayMessage(String message) {
         TextView priceTextView = (TextView) findViewById(R.id.message);
