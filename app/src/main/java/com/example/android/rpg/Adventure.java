@@ -158,7 +158,7 @@ class Adventure {
         String result = "\n" + attackStatus.getName() + "攻击" + defenceStatus.getName();
         Random battleRand = new Random();
         if (defenceStatus.getLUK() - attackStatus.getLUK() > battleRand.nextInt(11)){
-            result = result + "\n" + defenceStatus.getName() + "躲过了攻击";
+            result = result + "\n" + defenceStatus.getName() + "躲过攻击";
         } else {
             int damage = attackStatus.getATK() - defenceStatus.getDEF();
             if (damage <= 0) {
