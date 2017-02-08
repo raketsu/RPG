@@ -12,17 +12,6 @@ public class Status {
     private int TEC;
     private int LUK;
     private String name;
-    private String message = "";
-    public Status(){}
-    public Status(int hp, int atk, int def, int spd, int tec, int luk, String n){
-        HP = hp;
-        ATK = atk;
-        DEF = def;
-        SPD = spd;
-        TEC = tec;
-        LUK = luk;
-        name = n;
-    }
     public void setHP(int hp){
         HP = hp;
     }
@@ -40,9 +29,6 @@ public class Status {
     }
     public void setLUK(int luk){
         LUK = luk;
-    }
-    public void setMessage(String mes){
-        message = mes;
     }
     public void setName(String n){
         name = n;
@@ -64,9 +50,6 @@ public class Status {
     }
     public int getLUK(){
         return LUK;
-    }
-    public String getMessage(){
-        return message;
     }
     public String getName(){
         return name;

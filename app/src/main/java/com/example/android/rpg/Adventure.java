@@ -5,157 +5,147 @@ import java.util.Random;
  */
 
 class Adventure {
-    private int r;
+    private Random rand = new Random();
+    private String result = "";
     String go(String name) {
-        Random statusRand = new Random();
         int humanStandard = 10;
-        Status status = new Status(statusRand.nextInt(humanStandard) + humanStandard, statusRand.nextInt(humanStandard), statusRand.nextInt(humanStandard), statusRand.nextInt(humanStandard), statusRand.nextInt(humanStandard), statusRand.nextInt(humanStandard), name);
-        status = addStatus(status);
+        Status status = statusGenerate(humanStandard, name);
+        addStatus(status);
         for (int i = 0; i < 50; i++) {
-            Random eventRand = new Random();
-            r = eventRand.nextInt(5);
-            if (r == 0){
-                status = addBattleMessage(status, "\n");
+            if (rand.nextInt(5) == 0){
+                addMessage("");
                 other(status);
-            } else if (r == 1){
-                status = addBattleMessage(status, "\n");
+            } else if (rand.nextInt(5) == 1){
+                addMessage("");
                 trap(status);
                 if (status.getHP() == 0){
-                    status = addMessage(status, "体力耗尽，无力前行");
+                    addNameMessage(status, "体力耗尽，无力前行");
                     break;
                 }
-            } else if (r == 2){
-                status = addBattleMessage(status, "\n");
+            } else if (rand.nextInt(5) == 2){
+                addMessage("");
                 box(status);
             } else {
-                status = addBattleMessage(status, "\n");
+                addMessage("");
                 encounter(status);
                 if (status.getHP() == 0) {
-                    status = addMessage(status, "体力耗尽，无力前行");
+                    addNameMessage(status, "体力耗尽，无力前行");
                     break;
                 }
             }
         }
-        return status.getMessage();
+        return result;
     }
-    private Status other(Status status) {
-        Status otherStatus = status;
-        otherStatus.setHP(otherStatus.getHP() + 2);
-        otherStatus = addMessage(otherStatus, "发现四周安全，休息之后，HP恢复2");
-        otherStatus = addStatus(otherStatus);
-        return otherStatus;
+    private void other(Status status) {
+        status.setHP(status.getHP() + 2);
+        addNameMessage(status, "发现四周安全，休息之后，HP恢复2");
+        addStatus(status);
     }
-    private Status trap(Status status) {
-        Status trapStatus = status;
-        trapStatus = addMessage(trapStatus, "遇上陷阱");
-        Random trapRand = new Random();
-        if (trapRand.nextInt(11) > trapStatus.getLUK()){
-            trapStatus = addMessage(trapStatus, "落入陷阱，HP减少2");
-            if (trapStatus.getHP() - 2 < 0) {
-                trapStatus.setHP(0);
+    private void trap(Status status) {
+        addNameMessage(status, "遇上陷阱");
+        if (rand.nextInt(11) > status.getLUK()){
+            addNameMessage(status, "落入陷阱，HP减少2");
+            if (status.getHP() - 2 < 0) {
+                status.setHP(0);
             } else {
-                trapStatus.setHP(trapStatus.getHP() - 2);
+                status.setHP(status.getHP() - 2);
             }
         } else {
-            trapStatus = addMessage(trapStatus, "躲过一劫");
+            addNameMessage(status, "躲过一劫");
         }
-        trapStatus = addStatus(trapStatus);
-        return trapStatus;
+        addStatus(status);
     }
-    private Status box(Status status){
-        Status boxStatus = status;
-        boxStatus = addMessage(boxStatus, "打开宝箱");
-        Random boxRand = new Random();
-        int r = boxRand.nextInt(5);
-        if (r == 0){
-            boxStatus.setATK(boxStatus.getATK() + 1);
-            boxStatus = addMessage(boxStatus, "发现并喝下攻药水，攻击加1");
-        } else if (r == 1){
-            boxStatus.setDEF(boxStatus.getDEF() + 1);
-            boxStatus = addMessage(boxStatus, "发现并喝下防药水，防御加1");
-        } else if (r == 2){
-            boxStatus.setSPD(boxStatus.getSPD() + 1);
-            boxStatus = addMessage(boxStatus, "发现并喝下速药水，速度加1");
-        } else if (r == 3){
-            boxStatus.setTEC(boxStatus.getTEC() + 1);
-            boxStatus = addMessage(boxStatus, "发现并喝下技药水，技艺加1");
+    private void box(Status status){
+        addNameMessage(status, "打开宝箱");
+        if (rand.nextInt(5) == 0){
+            status.setATK(status.getATK() + 1);
+            addNameMessage(status, "发现并喝下攻药水，攻击加1");
+        } else if (rand.nextInt(5) == 1){
+            status.setDEF(status.getDEF() + 1);
+            addNameMessage(status, "发现并喝下防药水，防御加1");
+        } else if (rand.nextInt(5) == 2){
+            status.setSPD(status.getSPD() + 1);
+            addNameMessage(status, "发现并喝下速药水，速度加1");
+        } else if (rand.nextInt(5) == 3){
+            status.setTEC(status.getTEC() + 1);
+            addNameMessage(status, "发现并喝下技药水，技艺加1");
         } else {
-            boxStatus.setLUK(boxStatus.getLUK() + 1);
-            boxStatus = addMessage(boxStatus, "发现并喝下运药水，运气加1");
+            status.setLUK(status.getLUK() + 1);
+            addNameMessage(status, "发现并喝下运药水，运气加1");
         }
-        boxStatus = addStatus(boxStatus);
-        return boxStatus;
+        addStatus(status);
     }
-    private Status encounter(Status status){
-        Status encounterStatus = status;
-        encounterStatus = addMessage(encounterStatus, "遇上怪兽");
-        Random monsterStatusRand = new Random();
+    private void encounter(Status status){
+        addNameMessage(status, "遇上怪兽");
         int monsterStandard = 7;
-        Status monsterStatus = new Status(monsterStatusRand.nextInt(monsterStandard) + monsterStandard * 2, monsterStatusRand.nextInt(monsterStandard), monsterStatusRand.nextInt(monsterStandard), monsterStatusRand.nextInt(monsterStandard), monsterStatusRand.nextInt(monsterStandard), monsterStatusRand.nextInt(monsterStandard), "怪兽");
-        encounterStatus = addMonsterStatus(encounterStatus, monsterStatus);
-        if (encounterStatus.getSPD() >= monsterStatus.getSPD()){
+        Status monsterStatus = statusGenerate(monsterStandard, "怪兽");
+        addStatus(monsterStatus);
+        if (status.getSPD() >= monsterStatus.getSPD()){
             for (int i = 1; i > 0; i++){
-                encounterStatus = addBattleMessage(encounterStatus, "\n*******");
-                encounterStatus = addBattleMessage(encounterStatus, attack(encounterStatus, monsterStatus));
-                encounterStatus = addMonsterStatus(encounterStatus, monsterStatus);
+                addMessage("*********");
+                addMessage(attack(status, monsterStatus));
+                addStatus(monsterStatus);
                 if (monsterStatus.getHP() == 0) {
-                    encounterStatus = addMessage(encounterStatus, "打倒怪兽，获得胜利");
-                    if (encounterStatus.getLUK() >= monsterStatusRand.nextInt(11)) {
-                        encounterStatus = addMessage(encounterStatus, "发现宝箱");
+                    addNameMessage(status, "打倒怪兽，获得胜利");
+                    if (status.getLUK() >= rand.nextInt(11)) {
+                        addNameMessage(status, "发现宝箱");
                         box(status);
                     }
                     break;
                 }
-                encounterStatus = addBattleMessage(encounterStatus, "\n*******");
-                encounterStatus = addBattleMessage(encounterStatus, attack(monsterStatus,encounterStatus));
-                encounterStatus = addStatus(encounterStatus);
-                if (encounterStatus.getHP() == 0){
-                    encounterStatus = addMessage(encounterStatus, "被怪兽击败");
+                addMessage("*********");
+                addMessage(attack(monsterStatus,status));
+                addStatus(status);
+                if (status.getHP() == 0){
+                    addNameMessage(status, "被怪兽击败");
                     break;
                 }
             }
         } else {
             for (int i = 1; i > 0; i++) {
-                encounterStatus = addBattleMessage(encounterStatus, "\n*******");
-                encounterStatus = addBattleMessage(encounterStatus, attack(monsterStatus, encounterStatus));
-                encounterStatus = addStatus(encounterStatus);
-                if (encounterStatus.getHP() == 0) {
-                    encounterStatus = addMessage(encounterStatus, "被怪兽击败");
+                addMessage("*********");
+                addMessage(attack(monsterStatus,status));
+                addStatus(status);
+                if (status.getHP() == 0){
+                    addNameMessage(status, "被怪兽击败");
                     break;
                 }
-                encounterStatus = addBattleMessage(encounterStatus, "\n*******");
-                encounterStatus = addBattleMessage(encounterStatus, attack(encounterStatus, monsterStatus));
-                encounterStatus = addMonsterStatus(encounterStatus, monsterStatus);
+                addMessage("*********");
+                addMessage(attack(status, monsterStatus));
+                addStatus(monsterStatus);
                 if (monsterStatus.getHP() == 0) {
-                    encounterStatus = addMessage(encounterStatus, "打倒怪兽，获得胜利");
-                    if (encounterStatus.getLUK() >= monsterStatusRand.nextInt(11)) {
-                        encounterStatus = addMessage(encounterStatus, "发现宝箱");
+                    addNameMessage(status, "打倒怪兽，获得胜利");
+                    if (status.getLUK() >= rand.nextInt(11)) {
+                        addNameMessage(status, "发现宝箱");
                         box(status);
                     }
                     break;
                 }
             }
         }
-        return encounterStatus;
     }
-    private Status addMessage(Status status, String message){
-        status.setMessage(status.getMessage() +  "\n" + status.getName() + message);
-        return status;
+    private Status statusGenerate(int standard, String name){
+        Status statusN = new Status();
+        statusN.setHP(rand.nextInt(standard) + standard);
+        statusN.setATK(rand.nextInt(standard));
+        statusN.setDEF(rand.nextInt(standard));
+        statusN.setSPD(rand.nextInt(standard));
+        statusN.setTEC(rand.nextInt(standard));
+        statusN.setLUK(rand.nextInt(standard));
+        statusN.setName(name);
+        return statusN;
     }
-    private Status addBattleMessage(Status status, String message){
-        status.setMessage(status.getMessage() +  message);
-        return status;
+    private void addNameMessage(Status status, String message){
+        result = result + "\n" + status.getName() + message;
     }
-    private Status addStatus(Status status){
-        status.setMessage(status.getMessage() + "\n" + status.getName() + "\nHP:" + status.getHP() + "  ATK:" + status.getATK() + "  DEF:" + status.getDEF() + "\nSPD:" + status.getSPD() + "  TEC:" + status.getTEC() + "  LUK:" + status.getLUK());
-        return status;
+    private void addMessage(String message){
+        result = result + "\n" + message;
     }
-    private Status addMonsterStatus(Status statusH, Status statusM){
-        statusH.setMessage(statusH.getMessage() + "\n" + statusM.getName() + "\nHP:" + statusM.getHP() + "  ATK:" + statusM.getATK() + "  DEF:" + statusM.getDEF() + "\nSPD:" + statusM.getSPD() + "  TEC:" + statusM.getTEC() + "  LUK:" + statusM.getLUK());
-        return statusH;
+    private void addStatus(Status status){
+        result = result + "\n" + status.getName() + "\nHP:" + status.getHP() + "  ATK:" + status.getATK() + "  DEF:" + status.getDEF() + "\nSPD:" + status.getSPD() + "  TEC:" + status.getTEC() + "  LUK:" + status.getLUK();
     }
     private String attack(Status attackStatus, Status defenceStatus){
-        String result = "\n" + attackStatus.getName() + "攻击" + defenceStatus.getName();
+        String result = attackStatus.getName() + "攻击" + defenceStatus.getName();
         Random battleRand = new Random();
         if (defenceStatus.getLUK() - attackStatus.getLUK() > battleRand.nextInt(11)){
             result = result + "\n" + defenceStatus.getName() + "躲过攻击";
