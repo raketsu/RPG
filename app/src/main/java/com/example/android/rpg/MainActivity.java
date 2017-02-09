@@ -19,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
         EditText inputName = (EditText)findViewById(R.id.name);
         String name = inputName.getText().toString();
         String message = "";
-        if ("".equals(inputName.getText().toString().trim())){
+        if ("".equals(name.trim())){
             message = "请输入姓名";
             displayMessage(message);
         } else {
